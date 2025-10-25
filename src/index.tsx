@@ -12,7 +12,7 @@ import styles from './styles/index.module.scss';
 const domNode = document.getElementById('root') as HTMLDivElement;
 const root = createRoot(domNode);
 
-const App = () => {
+const App  = () => {
 	return (
 		<main
 			className={clsx(styles.main)}
