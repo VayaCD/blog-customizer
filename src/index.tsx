@@ -1,10 +1,10 @@
 import { createRoot } from 'react-dom/client';
-import { StrictMode, CSSProperties } from 'react';
+import { StrictMode } from 'react';
 import clsx from 'clsx';
 
 import { Article } from './components/article/Article';
 import { ArticleParamsForm } from './components/article-params-form/ArticleParamsForm';
-import { defaultArticleState } from './constants/articleProps';
+import { usePageState } from './hooks/usePageState';
 
 import './styles/index.scss';
 import styles from './styles/index.module.scss';
@@ -12,20 +12,24 @@ import styles from './styles/index.module.scss';
 const domNode = document.getElementById('root') as HTMLDivElement;
 const root = createRoot(domNode);
 
-const App  = () => {
+const App = () => {
+	const { pageState, updatePageState, resetPageState } = usePageState();
+
+	const handleApply = (newState: typeof pageState) => {
+		updatePageState(newState);
+	};
+
+	const handleReset = () => {
+		resetPageState();
+	};
+
 	return (
-		<main
-			className={clsx(styles.main)}
-			style={
-				{
-					'--font-family': defaultArticleState.fontFamilyOption.value,
-					'--font-size': defaultArticleState.fontSizeOption.value,
-					'--font-color': defaultArticleState.fontColor.value,
-					'--container-width': defaultArticleState.contentWidth.value,
-					'--bg-color': defaultArticleState.backgroundColor.value,
-				} as CSSProperties
-			}>
-			<ArticleParamsForm />
+		<main className={clsx(styles.main)}>
+			<ArticleParamsForm
+				initialState={pageState}
+				onApply={handleApply}
+				onReset={handleReset}
+			/>
 			<Article />
 		</main>
 	);
